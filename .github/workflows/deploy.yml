@@ -1,11 +1,9 @@
-name: Deploy .NET API to container registry
-
+name: deploy
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
