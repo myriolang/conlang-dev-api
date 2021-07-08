@@ -1,0 +1,9 @@
+[Bb]in/
+[Pp]roperties/
+[Oo]bj/
+.idea/
+.vs/
+.vscode/
+.ionide/
+
+appsettings.local.json
