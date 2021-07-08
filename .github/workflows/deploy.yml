@@ -34,3 +34,8 @@ jobs:
       with:
         push: true
         tags: ghcr.io/${{ github.repository }}:latest
+    - name: Invoke server deploy webhook
+      uses: distributhor/workflow-webhook@v2
+      env:
+        webhook_url: ${{ secrets.WEBHOOK_URL }}
+        webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
