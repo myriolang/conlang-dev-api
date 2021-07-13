@@ -23,7 +23,7 @@ namespace Myriolang.ConlangDev.API.Controllers
         /// </summary>
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult> ValidateToken() => Ok();
+        public ActionResult ValidateToken() => Ok();
 
         /// <summary>
         /// Validates an authentication query (username and password), returning

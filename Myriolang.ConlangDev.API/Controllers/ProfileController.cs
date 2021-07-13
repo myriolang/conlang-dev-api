@@ -27,5 +27,9 @@ namespace Myriolang.ConlangDev.API.Controllers
         [HttpPost("validate/username")]
         public async Task<ValidationResponse> ValidateUsername([FromBody] ValidateNewProfileUsernameQuery query)
             => await _mediator.Send(query);
+
+        [HttpPost("validate/email")]
+        public async Task<ValidationResponse> ValidateEmail([FromBody] ValidateNewProfileEmailQuery query)
+            => await _mediator.Send(query);
     }
 }

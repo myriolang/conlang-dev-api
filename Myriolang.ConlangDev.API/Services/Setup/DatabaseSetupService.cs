@@ -20,16 +20,22 @@ namespace Myriolang.ConlangDev.API.Services.Setup
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             /*
-             * unique index on profile username
+             * unique index on profile username and on profile email
              */
             var profiles = _database.GetCollection<Profile>("Profiles");
-            var profileIndexDefinition = Builders<Profile>.IndexKeys
+            var profileIndexUsernameDefinition = Builders<Profile>.IndexKeys
                 .Ascending(p => p.Username);
+            var profileIndexEmailDefinition = Builders<Profile>.IndexKeys
+                .Ascending(p => p.Email);
             await profiles.Indexes.CreateOneAsync(
-                new CreateIndexModel<Profile>(profileIndexDefinition, new CreateIndexOptions { Unique = true }),
+                new CreateIndexModel<Profile>(profileIndexUsernameDefinition, new CreateIndexOptions { Unique = true }),
                 cancellationToken: cancellationToken
             );
-            
+            await profiles.Indexes.CreateOneAsync(
+                new CreateIndexModel<Profile>(profileIndexEmailDefinition, new CreateIndexOptions { Unique = true }),
+                cancellationToken: cancellationToken
+            );
+
             /*
              * unique compound index on language profile + slug
              */
