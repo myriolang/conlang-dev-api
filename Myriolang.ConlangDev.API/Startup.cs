@@ -1,24 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Autofac;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Myriolang.ConlangDev.API.Commands.Authentication;
-using Myriolang.ConlangDev.API.Commands.Profiles;
+using Myriolang.ConlangDev.API.Middleware;
 using Myriolang.ConlangDev.API.Services;
 using Myriolang.ConlangDev.API.Services.Default;
 using Myriolang.ConlangDev.API.Services.Setup;
@@ -38,26 +27,11 @@ namespace Myriolang.ConlangDev.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
-            {
-                options.RequireHttpsMetadata = true;
-                options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.ASCII.GetBytes(Configuration.GetSection("Secrets")["JwtSecret"])
-                    ),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
-
-        services.AddControllers();
+            services.AddAuthentication("ConlangDevAuthentication")
+                .AddScheme<AuthenticationSchemeOptions, ConlangDevAuthenticationHandler>("ConlangDevAuthentication",
+                    null);
+            
+            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "Myriolang.ConlangDev.API", Version = "v1"});

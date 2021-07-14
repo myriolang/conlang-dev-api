@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
@@ -16,6 +17,8 @@ namespace Myriolang.ConlangDev.API.Models
         public string Hash { get; set; }
         public string Email { get; set; }
         public string DisplayName { get; set; }
+        public string Description { get; set; }
+        public List<string> Roles { get; set; }
         public DateTime Created { get; set; }
     }
 }

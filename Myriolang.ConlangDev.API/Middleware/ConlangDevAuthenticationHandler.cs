@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -33,10 +37,11 @@ namespace Myriolang.ConlangDev.API.Middleware
             if (profile is null)
                 return AuthenticateResult.Fail("Unauthorized");
 
-            var identity = new ClaimsIdentity(new[]
-            {
-                new Claim("id", profile.Id)
-            }, Scheme.Name);
+            var claims = new List<Claim> {new Claim("id", profile.Id)};
+            if (profile.Roles is not null)
+                claims.AddRange(profile.Roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+            var identity = new ClaimsIdentity(claims, Scheme.Name);
             var ticket = new AuthenticationTicket(new ClaimsPrincipal(identity), Scheme.Name);
             return AuthenticateResult.Success(ticket);
         }
