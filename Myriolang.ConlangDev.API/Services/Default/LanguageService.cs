@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using Myriolang.ConlangDev.API.Commands.Languages;
 using Myriolang.ConlangDev.API.Models;
+using Myriolang.ConlangDev.API.Models.Responses;
 
 namespace Myriolang.ConlangDev.API.Services.Default
 {
@@ -43,6 +44,21 @@ namespace Myriolang.ConlangDev.API.Services.Default
             {
                 return null;
             }
+        }
+
+        public async Task<ValidationResponse> ValidateSlug(ValidateNewLanguageSlugQuery query)
+        {
+            var count = await _languages.CountDocumentsAsync(
+                l => l.ProfileId == query.ProfileId && l.Slug == query.Slug
+            );
+            var response = new ValidationResponse
+            {
+                Field = "slug",
+                Value = query.Slug
+            };
+            response.Valid = count == 0;
+            response.Message = count > 0 ? "Identifier already exists for that user" : null;
+            return response;
         }
     }
 }

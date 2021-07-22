@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Myriolang.ConlangDev.API.Commands.Languages;
 using Myriolang.ConlangDev.API.Models;
+using Myriolang.ConlangDev.API.Models.Responses;
 
 namespace Myriolang.ConlangDev.API.Controllers
 {
@@ -27,18 +28,25 @@ namespace Myriolang.ConlangDev.API.Controllers
 
             return NoContent();
         }
-        
+
         [HttpPost]
         public async Task<ActionResult<Language>> NewLanguage([FromBody] NewLanguageMutation mutation)
         {
             mutation.ProfileId = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
             if (string.IsNullOrEmpty(mutation.ProfileId))
                 return Unauthorized();
-            
+
             var language = await _mediator.Send(mutation);
             if (language is not null)
                 return Ok(language);
             return UnprocessableEntity();
         }
-    }
+
+        [HttpPost("validate/slug")]
+        public async Task<ActionResult<ValidationResponse>> ValidateSlug([FromBody] ValidateNewLanguageSlugQuery query)
+        {
+            query.ProfileId = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+            return await _mediator.Send(query);
+        }
+}
 }
