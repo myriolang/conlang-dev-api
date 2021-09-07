@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Myriolang.ConlangDev.API.Commands.Authentication;
+using Myriolang.ConlangDev.API.Queries.Authentication;
 using Myriolang.ConlangDev.API.Models;
 using Myriolang.ConlangDev.API.Models.Responses;
 

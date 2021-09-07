@@ -5,6 +5,7 @@ using MongoDB.Driver;
 using Myriolang.ConlangDev.API.Commands.Languages;
 using Myriolang.ConlangDev.API.Models;
 using Myriolang.ConlangDev.API.Models.Responses;
+using Myriolang.ConlangDev.API.Queries.Languages;
 
 namespace Myriolang.ConlangDev.API.Services.Default
 {

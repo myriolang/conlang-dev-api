@@ -4,8 +4,14 @@ using MediatR;
 using Myriolang.ConlangDev.API.Models;
 using Myriolang.ConlangDev.API.Services;
 
-namespace Myriolang.ConlangDev.API.Commands.Profiles
+namespace Myriolang.ConlangDev.API.Queries.Profiles
 {
+    public class FetchProfileQuery : IRequest<Profile>
+    {
+        public string Id { get; set; }
+        public string Username { get; set; }
+    }
+    
     public class FetchProfileQueryHandler : IRequestHandler<FetchProfileQuery, Profile>
     {
         private readonly IProfileService _profileService;

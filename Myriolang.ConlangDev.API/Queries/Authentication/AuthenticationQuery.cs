@@ -1,4 +1,4 @@
-using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -6,8 +6,16 @@ using Myriolang.ConlangDev.API.Models;
 using Myriolang.ConlangDev.API.Models.Responses;
 using Myriolang.ConlangDev.API.Services;
 
-namespace Myriolang.ConlangDev.API.Commands.Authentication
+namespace Myriolang.ConlangDev.API.Queries.Authentication
 {
+    public class AuthenticationQuery : IRequest<AuthenticationResponse>
+    {
+        [Required]
+        public string Username { get; set; }
+        [Required]
+        public string Password { get; set; }
+    }
+    
     public class AuthenticationQueryHandler : IRequestHandler<AuthenticationQuery, AuthenticationResponse>
     {
         private readonly IAuthService _authService;

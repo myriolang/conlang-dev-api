@@ -8,6 +8,7 @@ using Myriolang.ConlangDev.API.Commands.Profiles;
 using Myriolang.ConlangDev.API.Mappers;
 using Myriolang.ConlangDev.API.Models;
 using Myriolang.ConlangDev.API.Models.Responses;
+using Myriolang.ConlangDev.API.Queries.Profiles;
 
 namespace Myriolang.ConlangDev.API.Controllers
 {
