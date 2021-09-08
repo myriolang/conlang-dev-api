@@ -33,7 +33,7 @@ namespace Myriolang.ConlangDev.API.Services.Default
         public async Task<IEnumerable<Language>> FindByProfile(string profileId)
             => await _languages.Find(l => l.ProfileId == profileId).ToListAsync();
 
-        public async Task<Language> Create(NewLanguageMutation mutation)
+        public async Task<Language> Create(CreateLanguageCommand mutation)
         {
             var language = Language.NewFromMutation(mutation);
             try

@@ -10,7 +10,7 @@ namespace Myriolang.ConlangDev.API.Services
     {
         public Task<Profile> FindById(string id);
         public Task<Profile> FindByUsername(string username);
-        public Task<Profile> Create(NewProfileMutation request);
+        public Task<Profile> Create(CreateProfileCommand request);
         public bool VerifyProfilePassword(Profile profile, string candidate);
         public Task<ValidationResponse> ValidateUsername(string username);
         public Task<ValidationResponse> ValidateEmail(string email);

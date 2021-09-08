@@ -20,7 +20,7 @@ namespace Myriolang.ConlangDev.API.Models
         public List<string> Tags { get; set; }
         public DateTime Created { get; set; }
 
-        public static Language NewFromMutation(NewLanguageMutation mutation) => new()
+        public static Language NewFromMutation(CreateLanguageCommand mutation) => new()
         {
             ProfileId = mutation.ProfileId,
             Name = mutation.Name,

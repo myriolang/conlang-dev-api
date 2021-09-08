@@ -10,7 +10,7 @@ using Myriolang.ConlangDev.API.Services;
 
 namespace Myriolang.ConlangDev.API.Commands.Languages
 {
-    public class NewLanguageMutation : IRequest<Language>
+    public class CreateLanguageCommand : IRequest<Language>
     {
         [BsonRepresentation(BsonType.ObjectId)]
         public string ProfileId { get; set; }
@@ -23,12 +23,12 @@ namespace Myriolang.ConlangDev.API.Commands.Languages
         public List<string> Tags { get; set; }
     }
     
-    public class NewLanguageMutationHandler : IRequestHandler<NewLanguageMutation, Language>
+    public class CreateLanguageCommandHandler : IRequestHandler<CreateLanguageCommand, Language>
     {
         private readonly ILanguageService _languageService;
-        public NewLanguageMutationHandler(ILanguageService languageService) => _languageService = languageService;
+        public CreateLanguageCommandHandler(ILanguageService languageService) => _languageService = languageService;
 
-        public Task<Language> Handle(NewLanguageMutation request, CancellationToken cancellationToken)
+        public Task<Language> Handle(CreateLanguageCommand request, CancellationToken cancellationToken)
             => _languageService.Create(request);
     }
 }

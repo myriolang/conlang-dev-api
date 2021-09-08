@@ -12,7 +12,7 @@ namespace Myriolang.ConlangDev.API.Services
         public Task<Language> FindById(string id);
         public Task<Language> FindBySlug(string slug);
         public Task<IEnumerable<Language>> FindByProfile(string profileId);
-        public Task<Language> Create(NewLanguageMutation mutation);
+        public Task<Language> Create(CreateLanguageCommand mutation);
         public Task<ValidationResponse> ValidateSlug(ValidateNewLanguageSlugQuery query);
     }
 }

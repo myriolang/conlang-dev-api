@@ -34,7 +34,7 @@ namespace Myriolang.ConlangDev.API.Services.Default
                 .Find(p => p.Username == username)
                 .FirstOrDefaultAsync();
 
-        public async Task<Profile> Create(NewProfileMutation request)
+        public async Task<Profile> Create(CreateProfileCommand request)
         {
             var profile = new Profile
             {

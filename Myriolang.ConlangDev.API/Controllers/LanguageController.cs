@@ -31,13 +31,13 @@ namespace Myriolang.ConlangDev.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Language>> NewLanguage([FromBody] NewLanguageMutation mutation)
+        public async Task<ActionResult<Language>> NewLanguage([FromBody] CreateLanguageCommand createLanguageCommand)
         {
-            mutation.ProfileId = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
-            if (string.IsNullOrEmpty(mutation.ProfileId))
+            createLanguageCommand.ProfileId = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+            if (string.IsNullOrEmpty(createLanguageCommand.ProfileId))
                 return Unauthorized();
 
-            var language = await _mediator.Send(mutation);
+            var language = await _mediator.Send(createLanguageCommand);
             if (language is not null)
                 return Ok(language);
             return UnprocessableEntity();

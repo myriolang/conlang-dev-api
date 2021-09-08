@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Myriolang.ConlangDev.API.Commands.Languages;
 using Myriolang.ConlangDev.API.Commands.Profiles;
 using Myriolang.ConlangDev.API.Mappers;
 using Myriolang.ConlangDev.API.Models;
@@ -41,9 +42,9 @@ namespace Myriolang.ConlangDev.API.Controllers
         }
         
         [HttpPost]
-        public async Task<ActionResult<Profile>> NewProfile([FromBody] NewProfileMutation newProfileMutation)
+        public async Task<ActionResult<Profile>> NewProfile([FromBody] CreateLanguageCommand createLanguageCommand)
         {
-            var profile = await _mediator.Send(newProfileMutation);
+            var profile = await _mediator.Send(createLanguageCommand);
             if (profile is not null)
                 return Ok(profile);
             return UnprocessableEntity();

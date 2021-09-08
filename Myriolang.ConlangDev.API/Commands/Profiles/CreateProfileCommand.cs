@@ -7,7 +7,7 @@ using Myriolang.ConlangDev.API.Services;
 
 namespace Myriolang.ConlangDev.API.Commands.Profiles
 {
-    public class NewProfileMutation : IRequest<Profile>
+    public class CreateProfileCommand : IRequest<Profile>
     {
         [Required]
         public string Username { get; set; }
@@ -17,12 +17,12 @@ namespace Myriolang.ConlangDev.API.Commands.Profiles
         public string Email { get; set; }
     }
     
-    public class NewProfileMutationHandler : IRequestHandler<NewProfileMutation, Profile>
+    public class CreateProfileCommandHandler : IRequestHandler<CreateProfileCommand, Profile>
     {
         private readonly IProfileService _profileService;
-        public NewProfileMutationHandler(IProfileService profileService) => _profileService = profileService;
+        public CreateProfileCommandHandler(IProfileService profileService) => _profileService = profileService;
 
-        public Task<Profile> Handle(NewProfileMutation request, CancellationToken cancellationToken)
+        public Task<Profile> Handle(CreateProfileCommand request, CancellationToken cancellationToken)
             => _profileService.Create(request);
     }
 }
