@@ -22,7 +22,7 @@ namespace Myriolang.ConlangDev.API.Commands.Profiles
         private readonly IProfileService _profileService;
         public CreateProfileCommandHandler(IProfileService profileService) => _profileService = profileService;
 
-        public Task<Profile> Handle(CreateProfileCommand request, CancellationToken cancellationToken)
-            => _profileService.Create(request);
+        public Task<Profile> Handle(CreateProfileCommand createProfileCommand, CancellationToken cancellationToken)
+            => _profileService.Create(createProfileCommand, cancellationToken);
     }
 }

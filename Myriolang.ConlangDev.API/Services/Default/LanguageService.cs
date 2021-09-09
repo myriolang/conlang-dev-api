@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
@@ -20,25 +21,33 @@ namespace Myriolang.ConlangDev.API.Services.Default
             _languages = database.GetCollection<Language>("Languages");
         }
 
-        public Task<Language> FindById(string id)
-        {
-            throw new System.NotImplementedException();
-        }
+        public async Task<Language> FindById(string id, CancellationToken cancellationToken)
+            => await _languages
+                .Find(l => l.Id == id)
+                .FirstOrDefaultAsync(cancellationToken)
+                .ConfigureAwait(false);
 
-        public Task<Language> FindBySlug(string slug)
-        {
-            throw new System.NotImplementedException();
-        }
+        public async Task<Language> FindBySlug(string slug, CancellationToken cancellationToken)
+            => await _languages
+                .Find(l => l.Slug == slug)
+                .FirstOrDefaultAsync(cancellationToken)
+                .ConfigureAwait(false);
 
-        public async Task<IEnumerable<Language>> FindByProfile(string profileId)
-            => await _languages.Find(l => l.ProfileId == profileId).ToListAsync();
+        public async Task<IEnumerable<Language>> FindByProfile(string profileId, CancellationToken cancellationToken)
+            => await _languages
+                .Find(l => l.ProfileId == profileId)
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
 
-        public async Task<Language> Create(CreateLanguageCommand mutation)
+        public async Task<Language> Create(CreateLanguageCommand createLanguageCommand,
+            CancellationToken cancellationToken)
         {
-            var language = Language.NewFromMutation(mutation);
+            var language = Language.NewFromMutation(createLanguageCommand);
             try
             {
-                await _languages.InsertOneAsync(language);
+                await _languages
+                    .InsertOneAsync(language, cancellationToken: cancellationToken)
+                    .ConfigureAwait(false);
                 return language;
             }
             catch
@@ -47,15 +56,19 @@ namespace Myriolang.ConlangDev.API.Services.Default
             }
         }
 
-        public async Task<ValidationResponse> ValidateSlug(ValidateNewLanguageSlugQuery query)
+        public async Task<ValidationResponse> ValidateSlug(ValidateNewLanguageSlugQuery validateNewLanguageSlugQuery,
+            CancellationToken cancellationToken)
         {
-            var count = await _languages.CountDocumentsAsync(
-                l => l.ProfileId == query.ProfileId && l.Slug == query.Slug
-            );
+            var count = await _languages
+                .CountDocumentsAsync(l =>
+                        l.ProfileId == validateNewLanguageSlugQuery.ProfileId
+                        && l.Slug == validateNewLanguageSlugQuery.Slug,
+                    cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
             var response = new ValidationResponse
             {
                 Field = "slug",
-                Value = query.Slug
+                Value = validateNewLanguageSlugQuery.Slug
             };
             response.Valid = count == 0;
             response.Message = count > 0 ? "Identifier already exists for that user" : null;

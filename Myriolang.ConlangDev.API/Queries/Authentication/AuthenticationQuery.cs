@@ -23,6 +23,6 @@ namespace Myriolang.ConlangDev.API.Queries.Authentication
 
         public async Task<AuthenticationResponse> Handle(AuthenticationQuery request,
             CancellationToken cancellationToken)
-            => await _authService.Authenticate(request.Username, request.Password);
+            => await _authService.Authenticate(request.Username, request.Password, cancellationToken);
     }
 }

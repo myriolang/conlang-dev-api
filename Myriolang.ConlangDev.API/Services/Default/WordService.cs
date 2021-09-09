@@ -36,7 +36,9 @@ namespace Myriolang.ConlangDev.API.Services.Default
 
         public async Task<Word> Create(CreateWordCommand createWordCommand, CancellationToken cancellationToken)
         {
-            var language = await _languageService.FindById(createWordCommand.LanguageId);
+            var language = await _languageService
+                .FindById(createWordCommand.LanguageId, cancellationToken)
+                .ConfigureAwait(false);
             if (language is null) return null;
             var word = new Word
             {

@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -24,15 +25,17 @@ namespace Myriolang.ConlangDev.API.Services.Default
             );
         }
         
-        public async Task<AuthenticationResponse> Authenticate(string username, string password)
+        public async Task<AuthenticationResponse> Authenticate(string username, string password,
+            CancellationToken cancellationToken)
         {
-            var profile = await _profileService.FindByUsername(username);
+            var profile = await _profileService
+                .FindByUsername(username, cancellationToken)
+                .ConfigureAwait(false);
             if (profile is null) return null;
-            if (!_profileService.VerifyProfilePassword(profile, password)) return null;
-            return GenerateResponse(profile);
+            return !_profileService.VerifyProfilePassword(profile, password) ? null : GenerateResponse(profile);
         }
 
-        public async Task<Profile> ValidateToken(string jwt)
+        public async Task<Profile> ValidateToken(string jwt, CancellationToken cancellationToken)
         {
             try
             {
@@ -46,7 +49,9 @@ namespace Myriolang.ConlangDev.API.Services.Default
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
                 var id = ((JwtSecurityToken) validatedToken).Claims.First(c => c.Type == "id").Value;
-                return await _profileService.FindById(id);
+                return await _profileService
+                    .FindById(id, cancellationToken)
+                    .ConfigureAwait(false);
             }
             catch
             {

@@ -22,10 +22,8 @@ namespace Myriolang.ConlangDev.API.Commands.Words
     {
         private readonly IWordService _wordService;
         public CreateWordCommandHandler(IWordService wordService) => _wordService = wordService;
-        
-        public async Task<Word> Handle(CreateWordCommand request, CancellationToken cancellationToken)
-            => await _wordService
-                .Create(request, cancellationToken)
-                .ConfigureAwait(false);
+
+        public Task<Word> Handle(CreateWordCommand request, CancellationToken cancellationToken)
+            => _wordService.Create(request, cancellationToken);
     }
 }

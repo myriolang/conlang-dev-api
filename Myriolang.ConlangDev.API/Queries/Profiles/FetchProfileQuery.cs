@@ -20,9 +20,13 @@ namespace Myriolang.ConlangDev.API.Queries.Profiles
         public async Task<Profile> Handle(FetchProfileQuery request, CancellationToken cancellationToken)
         {
             if (request.Id is not null && request.Id.Length > 0)
-                return await _profileService.FindById(request.Id);
+                return await _profileService
+                    .FindById(request.Id, cancellationToken)
+                    .ConfigureAwait(false);
             if (request.Username is not null && request.Username.Length > 0)
-                return await _profileService.FindByUsername(request.Username);
+                return await _profileService
+                    .FindByUsername(request.Username, cancellationToken)
+                    .ConfigureAwait(false);
             return null;
         }
     }

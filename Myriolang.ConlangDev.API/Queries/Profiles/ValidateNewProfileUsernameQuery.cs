@@ -21,7 +21,8 @@ namespace Myriolang.ConlangDev.API.Queries.Profiles
         public ValidateNewProfileUsernameQueryHandler(IProfileService profileService) =>
             _profileService = profileService;
 
-        public async Task<ValidationResponse> Handle(ValidateNewProfileUsernameQuery request,
-            CancellationToken cancellationToken) => await _profileService.ValidateUsername(request.Username);
+        public async Task<ValidationResponse> Handle(ValidateNewProfileUsernameQuery validateNewProfileUsernameQuery,
+            CancellationToken cancellationToken) => await _profileService
+                .ValidateUsername(validateNewProfileUsernameQuery.Username, cancellationToken);
     }
 }

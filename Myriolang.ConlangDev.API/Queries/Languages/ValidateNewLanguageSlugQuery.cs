@@ -22,6 +22,6 @@ namespace Myriolang.ConlangDev.API.Queries.Languages
             _languageService = languageService;
 
         public async Task<ValidationResponse> Handle(ValidateNewLanguageSlugQuery request,
-            CancellationToken cancellationToken) => await _languageService.ValidateSlug(request);
+            CancellationToken cancellationToken) => await _languageService.ValidateSlug(request, cancellationToken);
     }
 }

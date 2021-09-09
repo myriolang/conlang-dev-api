@@ -18,7 +18,8 @@ namespace Myriolang.ConlangDev.API.Queries.Profiles
         private readonly IProfileService _profileService;
         public ValidateNewProfileEmailQueryHandler(IProfileService profileService) => _profileService = profileService;
         
-        public async Task<ValidationResponse> Handle(ValidateNewProfileEmailQuery request,
-            CancellationToken cancellationToken) => await _profileService.ValidateEmail(request.Email);
+        public async Task<ValidationResponse> Handle(ValidateNewProfileEmailQuery validateNewProfileEmailQuery,
+            CancellationToken cancellationToken) => await _profileService
+                .ValidateEmail(validateNewProfileEmailQuery.Email, cancellationToken);
     }
 }

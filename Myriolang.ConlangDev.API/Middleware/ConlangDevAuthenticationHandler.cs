@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
@@ -33,7 +34,7 @@ namespace Myriolang.ConlangDev.API.Middleware
                 return AuthenticateResult.Fail("Unauthorized");
 
             var token = authHeader.Split(" ")[1];
-            var profile = await _authService.ValidateToken(token);
+            var profile = await _authService.ValidateToken(token, default);
             if (profile is null)
                 return AuthenticateResult.Fail("Unauthorized");
 

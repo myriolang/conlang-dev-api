@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,17 +25,19 @@ namespace Myriolang.ConlangDev.API.Services.Default
             _profiles = database.GetCollection<Profile>("Profiles");
         }
 
-        public async Task<Profile> FindById(string id)
+        public async Task<Profile> FindById(string id, CancellationToken cancellationToken)
             => await _profiles
                 .Find(p => p.Id == id)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken)
+                .ConfigureAwait(false);
 
-        public async Task<Profile> FindByUsername(string username)
+        public async Task<Profile> FindByUsername(string username, CancellationToken cancellationToken)
             => await _profiles
                 .Find(p => p.Username == username)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken)
+                .ConfigureAwait(false);
 
-        public async Task<Profile> Create(CreateProfileCommand request)
+        public async Task<Profile> Create(CreateProfileCommand request, CancellationToken cancellationToken)
         {
             var profile = new Profile
             {
@@ -45,7 +48,9 @@ namespace Myriolang.ConlangDev.API.Services.Default
             };
             try
             {
-                await _profiles.InsertOneAsync(profile);
+                await _profiles
+                    .InsertOneAsync(profile, cancellationToken: cancellationToken)
+                    .ConfigureAwait(false);
                 return profile;
             }
             catch
@@ -57,9 +62,11 @@ namespace Myriolang.ConlangDev.API.Services.Default
         public bool VerifyProfilePassword(Profile profile, string candidate) 
             => VerifyPassword(candidate, profile.Hash);
 
-        public async Task<ValidationResponse> ValidateUsername(string username)
+        public async Task<ValidationResponse> ValidateUsername(string username, CancellationToken cancellationToken)
         {
-            var count = await _profiles.CountDocumentsAsync(p => p.Username == username);
+            var count = await _profiles
+                .CountDocumentsAsync(p => p.Username == username, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
             var response = new ValidationResponse
             {
                 Field = "username",
@@ -70,9 +77,11 @@ namespace Myriolang.ConlangDev.API.Services.Default
             return response;
         }
 
-        public async Task<ValidationResponse> ValidateEmail(string email)
+        public async Task<ValidationResponse> ValidateEmail(string email, CancellationToken cancellationToken)
         {
-            var count = await _profiles.CountDocumentsAsync(p => p.Email == email);
+            var count = await _profiles
+                .CountDocumentsAsync(p => p.Email == email, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
             var response = new ValidationResponse
             {
                 Field = "email",

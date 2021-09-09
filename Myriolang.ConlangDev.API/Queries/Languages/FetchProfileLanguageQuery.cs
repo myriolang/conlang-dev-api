@@ -21,6 +21,6 @@ namespace Myriolang.ConlangDev.API.Queries.Languages
 
         public async Task<IEnumerable<Language>> Handle(FetchProfileLanguageQuery request,
             CancellationToken cancellationToken)
-            => await _languageService.FindByProfile(request.ProfileId);
+            => await _languageService.FindByProfile(request.ProfileId, cancellationToken);
     }
 }

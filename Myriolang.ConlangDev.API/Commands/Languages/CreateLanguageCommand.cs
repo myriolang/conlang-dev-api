@@ -29,6 +29,6 @@ namespace Myriolang.ConlangDev.API.Commands.Languages
         public CreateLanguageCommandHandler(ILanguageService languageService) => _languageService = languageService;
 
         public Task<Language> Handle(CreateLanguageCommand request, CancellationToken cancellationToken)
-            => _languageService.Create(request);
+            => _languageService.Create(request, cancellationToken);
     }
 }
