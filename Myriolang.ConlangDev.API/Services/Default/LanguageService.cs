@@ -13,12 +13,14 @@ namespace Myriolang.ConlangDev.API.Services.Default
     public class LanguageService : ILanguageService
     {
         private readonly IMongoCollection<Language> _languages;
-
-        public LanguageService(IConfiguration configuration)
+        private readonly IProfileService _profileService;
+        
+        public LanguageService(IConfiguration configuration, IProfileService profileService)
         {
             var client = new MongoClient(configuration.GetSection("MongoDB")["ConnectionString"]);
             var database = client.GetDatabase(configuration.GetSection("MongoDB")["DatabaseName"]);
             _languages = database.GetCollection<Language>("Languages");
+            _profileService = profileService;
         }
 
         public async Task<Language> FindById(string id, CancellationToken cancellationToken)
@@ -27,11 +29,17 @@ namespace Myriolang.ConlangDev.API.Services.Default
                 .FirstOrDefaultAsync(cancellationToken)
                 .ConfigureAwait(false);
 
-        public async Task<Language> FindBySlug(string slug, CancellationToken cancellationToken)
-            => await _languages
-                .Find(l => l.Slug == slug)
+        public async Task<Language> FindByProfileSlug(string username, string slug, CancellationToken cancellationToken)
+        {
+            var profile = await _profileService
+                .FindByUsername(username, cancellationToken)
+                .ConfigureAwait(false);
+            if (profile is null) return null;
+            return await _languages
+                .Find(l => l.ProfileId == profile.Id && l.Slug == slug)
                 .FirstOrDefaultAsync(cancellationToken)
                 .ConfigureAwait(false);
+        }
 
         public async Task<IEnumerable<Language>> FindByProfile(string profileId, CancellationToken cancellationToken)
             => await _languages

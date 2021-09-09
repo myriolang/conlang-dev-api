@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -9,6 +10,7 @@ using Myriolang.ConlangDev.API.Commands.Profiles;
 using Myriolang.ConlangDev.API.Mappers;
 using Myriolang.ConlangDev.API.Models;
 using Myriolang.ConlangDev.API.Models.Responses;
+using Myriolang.ConlangDev.API.Queries.Languages;
 using Myriolang.ConlangDev.API.Queries.Profiles;
 
 namespace Myriolang.ConlangDev.API.Controllers
@@ -40,7 +42,7 @@ namespace Myriolang.ConlangDev.API.Controllers
                 return NotFound();
             return User.IsInRole("ManageUsers") ? Ok(profile) : Ok(PublicProfile.FromProfile(profile));
         }
-        
+
         [HttpPost]
         public async Task<ActionResult<Profile>> NewProfile([FromBody] CreateLanguageCommand createLanguageCommand)
         {

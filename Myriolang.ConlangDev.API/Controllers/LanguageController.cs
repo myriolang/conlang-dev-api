@@ -30,6 +30,14 @@ namespace Myriolang.ConlangDev.API.Controllers
             return NoContent();
         }
 
+        [HttpGet("{username}/{slug}")]
+        public async Task<ActionResult<Language>> GetByProfileSlug([FromRoute] string username, [FromRoute] string slug)
+        {
+            var language = await _mediator.Send(new GetProfileLanguageQuery(username, slug));
+            if (language is not null) return Ok(language);
+            return NotFound();
+        }
+
         [HttpPost]
         public async Task<ActionResult<Language>> NewLanguage([FromBody] CreateLanguageCommand createLanguageCommand)
         {

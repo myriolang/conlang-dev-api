@@ -22,17 +22,31 @@ namespace Myriolang.ConlangDev.API.Services.Default
             _languageService = languageService;
         }
 
-        public async Task<Word> FindById(string id, CancellationToken cancellationToken)
-            => await _words
-                .Find(w => w.Id == id)
+        public async Task<Word> FindByProfileLanguageId(string username, string languageSlug, string id,
+            CancellationToken cancellationToken)
+        {
+            var language = await _languageService
+                .FindByProfileSlug(username, languageSlug, cancellationToken)
+                .ConfigureAwait(false);
+            if (language is null) return null;
+            return await _words
+                .Find(w => w.LanguageId == language.Id && w.Id == id)
                 .FirstOrDefaultAsync(cancellationToken)
                 .ConfigureAwait(false);
+        }
 
-        public async Task<IEnumerable<Word>> ListByLanguage(string languageId, CancellationToken cancellationToken)
-            => await _words
-                .Find(w => w.LanguageId == languageId)
+        public async Task<IEnumerable<Word>> ListByProfileLanguage(string username, string languageSlug,
+            CancellationToken cancellationToken)
+        {
+            var language = await _languageService
+                .FindByProfileSlug(username, languageSlug, cancellationToken)
+                .ConfigureAwait(false);
+            if (language is null) return null;
+            return await _words
+                .Find(w => w.LanguageId == language.Id)
                 .ToListAsync(cancellationToken)
                 .ConfigureAwait(false);
+        }
 
         public async Task<Word> Create(CreateWordCommand createWordCommand, CancellationToken cancellationToken)
         {

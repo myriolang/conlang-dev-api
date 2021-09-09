@@ -11,7 +11,7 @@ namespace Myriolang.ConlangDev.API.Services
     public interface ILanguageService
     {
         public Task<Language> FindById(string id, CancellationToken cancellationToken);
-        public Task<Language> FindBySlug(string slug, CancellationToken cancellationToken);
+        public Task<Language> FindByProfileSlug(string username, string slug, CancellationToken cancellationToken);
         public Task<IEnumerable<Language>> FindByProfile(string profileId, CancellationToken cancellationToken);
         public Task<Language> Create(CreateLanguageCommand createLanguageCommand, CancellationToken cancellationToken);
         public Task<ValidationResponse> ValidateSlug(ValidateNewLanguageSlugQuery validateNewLanguageSlugQuery,
