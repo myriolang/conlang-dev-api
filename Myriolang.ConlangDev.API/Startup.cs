@@ -46,6 +46,7 @@ namespace Myriolang.ConlangDev.API
             builder.RegisterType<AuthService>().As<IAuthService>().InstancePerLifetimeScope();
             builder.RegisterType<ProfileService>().As<IProfileService>().InstancePerLifetimeScope();
             builder.RegisterType<LanguageService>().As<ILanguageService>().InstancePerLifetimeScope();
+            builder.RegisterType<WordService>().As<IWordService>().InstancePerLifetimeScope();
             // Mediator & its handlers
             builder.RegisterType<Mediator>().As<IMediator>().InstancePerLifetimeScope();
             builder.Register<ServiceFactory>(context =>

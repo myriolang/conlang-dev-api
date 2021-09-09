@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
@@ -46,5 +47,6 @@ namespace Myriolang.ConlangDev.API.Models
         public string Headword { get; set; }
         public string Pronunciation { get; set; }
         public List<Sense> Senses { get; set; }
+        public DateTime Created { get; set; }
     }
 }

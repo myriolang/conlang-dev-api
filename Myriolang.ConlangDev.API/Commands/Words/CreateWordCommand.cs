@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Myriolang.ConlangDev.API.Models;
+using Myriolang.ConlangDev.API.Services;
 
 namespace Myriolang.ConlangDev.API.Commands.Words
 {
@@ -19,9 +20,12 @@ namespace Myriolang.ConlangDev.API.Commands.Words
     
     public class CreateWordCommandHandler : IRequestHandler<CreateWordCommand, Word>
     {
-        public Task<Word> Handle(CreateWordCommand request, CancellationToken cancellationToken)
-        {
-            throw new System.NotImplementedException();
-        }
+        private readonly IWordService _wordService;
+        public CreateWordCommandHandler(IWordService wordService) => _wordService = wordService;
+        
+        public async Task<Word> Handle(CreateWordCommand request, CancellationToken cancellationToken)
+            => await _wordService
+                .Create(request, cancellationToken)
+                .ConfigureAwait(false);
     }
 }

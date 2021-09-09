@@ -47,10 +47,6 @@ namespace Myriolang.ConlangDev.API.Services.Setup
                 new CreateIndexModel<Language>(languageIndexDefinition, new CreateIndexOptions { Unique = true }),
                 cancellationToken: cancellationToken
             );
-            
-            /*
-             * unique compound index on word headword + language id
-             */
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
